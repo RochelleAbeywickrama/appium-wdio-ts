@@ -9,8 +9,8 @@
     "run:AndroidApp": "npx cross-env TEST_ENV=app PLATFORM=android npx wdio run src/config/wdio.conf.ts"
     "run:AndroidChrome": "npx cross-env TEST_ENV=browser PLATFORM=android npx wdio run src/config/wdio.conf.ts"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["appium", "appium 2.0", "webdriverIO", "typescript", "automation"],
+  "author": "Rochelle Abeywickrama",
   "license": "ISC",
   "description": "",
   "devDependencies": {
