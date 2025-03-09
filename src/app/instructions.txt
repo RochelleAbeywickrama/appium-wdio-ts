@@ -1,0 +1,7 @@
+Instructructions:
+================
+
+To test your native Android App,
+1. You need to download the APK file
+2. Rename it to "app.apk"
+3. Place it under 'src/app/app.apk' directory
