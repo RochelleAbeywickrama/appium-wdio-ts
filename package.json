@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "wdio": "npx wdio run src/config/wdio.conf.ts",
+    "run:wdio": "npx wdio run src/config/wdio.conf.ts",
     "start:appium": "appium --relaxed-security",
     "run:AndroidApp": "npx cross-env TEST_ENV=app PLATFORM=android npx wdio run src/config/wdio.conf.ts",
     "run:AndroidChrome": "npx cross-env TEST_ENV=browser PLATFORM=android npx wdio run src/config/wdio.conf.ts",
