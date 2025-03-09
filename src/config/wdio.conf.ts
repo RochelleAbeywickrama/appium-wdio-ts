@@ -1,3 +1,5 @@
+import allureReporter from "@wdio/allure-reporter";
+import { browser } from "@wdio/globals";
 
 import { androidAppiumConfig, androidChromeConfig, iosAppiumConfig, iosSafariConfig } from "./capabilities";
 
@@ -138,7 +140,14 @@ export const config: WebdriverIO.Config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
-    reporters: ['spec'],
+    reporters: ['spec',
+        ['allure', {
+            outputDir: 'allure-results', // Folder where raw allure results will be stored
+            disableWebdriverStepsReporting: false, // Set to true if you don't want to log WebDriver steps
+            disableWebdriverScreenshotsReporting: false, // Set to false to include screenshots
+            useCucumberStepReporter: false, // Set to true if using Cucumber
+        }]
+    ],
 
     // Options to be passed to Mocha.
     // See the full list at http://mochajs.org/
@@ -243,6 +252,12 @@ export const config: WebdriverIO.Config = {
      */
     // afterTest: function(test, context, { error, result, duration, passed, retries }) {
     // },
+    afterTest: async function (test, context, { error }) {
+        if (error) {
+            await browser.takeScreenshot();
+            allureReporter.addAttachment('Screenshot', await browser.takeScreenshot(), 'image/png');
+        }
+    },
 
 
     /**
@@ -287,6 +302,18 @@ export const config: WebdriverIO.Config = {
      */
     // onComplete: function(exitCode, config, capabilities, results) {
     // },
+    onComplete: function () {
+        const reportError = new Error('Could not generate Allure report');
+        const { exec } = require('child_process');
+        exec('npx allure generate allure-results --clean -o allure-report', (error: any) => {
+            if (error) {
+                console.error(reportError);
+            } else {
+                console.log('Allure report successfully generated');
+            }
+        });
+    }
+
     /**
     * Gets executed when a refresh happens.
     * @param {string} oldSessionId session ID of the old session
