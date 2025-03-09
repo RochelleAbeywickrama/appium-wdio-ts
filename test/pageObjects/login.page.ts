@@ -1,5 +1,6 @@
 import { $ } from '@wdio/globals'
 import Page from "./page";
+import allureReporter from "@wdio/allure-reporter";
 
 /**
  * sub page containing specific selectors and methods for a specific page
@@ -25,6 +26,7 @@ class LoginPage extends Page {
      * e.g. to login using username and password
      */
     public async login (username: string, password: string) {
+        allureReporter.addStep("Login to application")
         await this.inputUsername.setValue(username);
         await this.inputPassword.setValue(password);
         await this.btnSubmit.click();
