@@ -1,0 +1,51 @@
+name: Run Appium Tests
+
+on:
+  workflow_dispatch:  # Allows manual trigger of workflow
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest  # Use an Ubuntu runner
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18  # Ensure Node.js version compatibility
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Set Up Emulator (if needed)
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30  # Adjust API level as per requirement
+          target: default
+          arch: x86_64
+          profile: pixel_4  # Use a predefined device profile
+          emulator-options: "-no-window -no-audio -no-snapshot"
+          script: echo "Emulator is running"
+
+      - name: Start Appium Server
+        run: |
+          npx appium &  # Start Appium in the background
+          sleep 10      # Wait for Appium to be ready
+
+      - name: Run Smoke Tests
+        run: npm run grep:Smoke
+
+      - name: Generate Allure Report
+        run: npm run allure:report
+
+      - name: Upload Allure Report as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report  # Adjust path if needed
+
+      - name: Stop Emulator (if used)
+        run: adb emu kill || true
