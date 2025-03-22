@@ -40,6 +40,7 @@
     "appium-wait-plugin": "^3.0.2",
     "appium-xcuitest-driver": "^8.3.3",
     "cross-env": "^7.0.3",
+    "eslint-plugin-unused-imports": "^4.1.4",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.0",
     "prettier": "^3.5.3",
