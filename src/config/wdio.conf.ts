@@ -4,6 +4,7 @@ import { browser } from "@wdio/globals";
 import { androidAppiumConfig, androidChromeConfig, iosAppiumConfig, iosSafariConfig } from "./capabilities";
 
 import dotenv from 'dotenv';
+const fs = require("fs");
 dotenv.config();
 
 const selectedCapability =
@@ -11,7 +12,7 @@ const selectedCapability =
         process.env.TEST_ENV === "browser" && process.env.PLATFORM === "android" ? androidChromeConfig :
             process.env.TEST_ENV === "app" && process.env.PLATFORM === "ios" ? iosAppiumConfig :
                 process.env.TEST_ENV === "browser" && process.env.PLATFORM === "ios" ? iosSafariConfig :
-                    androidChromeConfig;  // Default to Android Chrome if no matching condition
+                  androidAppiumConfig;  // Default to Android Chrome if no matching condition
 
 // @ts-ignore
 export const config: WebdriverIO.Config = {
@@ -172,6 +173,17 @@ export const config: WebdriverIO.Config = {
      */
     // onPrepare: function (config, capabilities) {
     // },
+    onPrepare: function () {
+        const deleteFolder = (folderPath: string) => {
+            if (fs.existsSync(folderPath)) {
+                fs.rmSync(folderPath, { recursive: true, force: true });
+                console.log(`Deleted folder: ${folderPath}`);
+            }
+        };
+
+        deleteFolder("./allure-results");
+        deleteFolder("./allure-report");
+    },
     /**
      * Gets executed before a worker process is spawned and can be used to initialize specific service
      * for that worker as well as modify runtime environments in an async fashion.
