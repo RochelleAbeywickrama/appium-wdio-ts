@@ -40,6 +40,8 @@
     "appium-wait-plugin": "^3.0.2",
     "appium-xcuitest-driver": "^8.3.3",
     "cross-env": "^7.0.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
     "prettier": "^3.5.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2",
@@ -48,5 +50,13 @@
   },
   "dependencies": {
     "dotenv": "^16.4.7"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/**/*.{ts,tsx}": "prettier --write"
   }
 }
